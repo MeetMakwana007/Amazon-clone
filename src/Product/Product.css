@@ -12,6 +12,7 @@
   max-height: 400px;
   min-width: 100px;
 }
+
 .product__rating {
   display: flex;
 }
