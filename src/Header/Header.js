@@ -34,10 +34,14 @@ function Header() {
                     <span className="header_optionTwo">{user ? 'Sign Out' : 'Sign In'}</span>
                 </div>
                 </Link>
+
+                <Link to='/orders'>
                 <div className="header__option">
                     <span className="header__optionOne">Returns</span>
                     <span className="header_optionTwo">& Orders</span>
                 </div>
+                </Link>
+
                 <div className="header__option">
                     <span className="header__optionOne">Your</span>
                     <span className="header_optionTwo">Prime</span>
@@ -51,7 +55,7 @@ function Header() {
                 
             </div>
         </div>
-    )
+    );
 }
 
 export default Header

@@ -4,13 +4,14 @@ import Header from './Header/Header';
 import Home from './Home/Home';
 import Checkout from "./Checkout/Checkout";
 import Login from "./Login/Login";
-import { useEffect } from "react";
+import  React ,{ useEffect } from "react";
 import { auth } from "./firebase";
 import { useStateValue } from "./Checkout/Subtotal/StateProvider";
 import Payment from "./Payment/Checkout/Payment";
 import {loadStripe} from '@stripe/stripe-js'
 import {Elements} from '@stripe/react-stripe-js'
-import Orders from "./Orders/Orders";
+import Orders from "./Orders";
+
 
 
 const promise = loadStripe('pk_test_51JDl1sSHxJWwnrpl2DhrD1BDqXpXVR29fQh2Mv02KyGVfVWgnlP7ry1rTxdmx8pxOxAIEPhqTrnZNZ8VG2ycZY5E00LAK3cJqj');
@@ -23,7 +24,7 @@ function App() {
   useEffect(() => {   
     
 
-    auth.onAuthStateChanged(authUser => {
+    auth.onAuthStateChanged((authUser) => {
       console.log(authUser);
       
       if(authUser){
@@ -32,33 +33,28 @@ function App() {
         dispatch({
           type:'SET_USER',
           user: authUser
-        })
+        });
       }else{
         //user is loged out
         dispatch({
           type: 'SET_USER'
           , user: null
-        })
+        });
       }
-    })
-  }, [])
+    });
+  }, []);
   return (
     <Router>
     <div className="app">
-     
-   
-      <Switch>
-        
-      <Route path="/login">
-       <Login />
-      </Route>
-
-      <Route path="/orders">
+    <Switch>
+    <Route path="/orders">
       <Header/>
        <Orders />
       </Route>
-
-        <Route path="/checkout">
+      <Route path="/login">
+       <Login />
+      </Route>
+      <Route path="/checkout">
           <Header/>
           <Checkout />
           

@@ -1,7 +1,6 @@
 const functions = require("firebase-functions");
 const express = require('express');
 const cors = require('cors');
-const { request, response } = require("express");
 const stripe = require('stripe')('sk_test_51JDl1sSHxJWwnrplZWIqafSICTvMKimVI6A4WU4OZcVpzwplVuDmoHHGApI5s8fa5p8KAmHZ08Pl9Z4Z4fHHanyY00uOnQ2Siw')
 
 const app = express()
@@ -28,8 +27,8 @@ app.post('/payment/create',async (req,res)=>{
 
     res.status(201).send({
         clientSecret: paymentIntent.client_secret
-    })
-})
+    });
+});
 
 
 exports.api = functions.https.onRequest(app)

@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 import { getBasketTotal } from '../../reudcer'
-import axios from './axios'
+import axios from '../../axios'
 import { db } from '../../firebase';
 
 
@@ -17,18 +17,21 @@ function Payment() {
     const [error,setError] = useState(null);
     const [disabled,setDisabled] = useState(true);
 
-    const [clientSecret,setClientSecret] = useState(true);
+    const [clientSecret,setClientSecret] = useState('');
     const [succeeded,setSucceeded]=useState(false);
     const [processing,setProcessing] = useState(""); 
 
     useEffect(()=>{
         //generate special stripe secret for charge customer
+
         const getClientSecret = async() =>{
+            debugger
             const response = await axios({
                 method: 'post',
                 url: `/payment/create?total=${getBasketTotal(basket) * 100}`
             });
-
+            console.log('chk val----------------------', clientSecret, response);
+            debugger    
             setClientSecret(response.data.clientSecret)
         }
 
@@ -41,15 +44,19 @@ function Payment() {
 
     let value = getBasketTotal(basket);
 
-    const handleSubmit = async event =>{
+    const handleSubmit = async (event) =>{
             event.preventDefault();
             setProcessing(true);
-
+            console.log('type of secret: ',clientSecret);
             const payload = await stripe.confirmCardPayment(clientSecret,{
                 payment_method:{
-                    card: elements.getElement(CardElement)
-                }
-            }).then(({paymentIntent}) =>{
+                    card: elements.getElement(CardElement),
+                    billing_details: {
+                        name: 'Jenny Rosen',
+                      },
+                },
+            }).then((paymentIntent) =>{
+                debugger
                     //paymentIntent = payment Confirmation
                 console.log(paymentIntent);
 
@@ -66,7 +73,7 @@ function Payment() {
                 dispatch({
                     type: 'EMPTY_BASKET'
                 })
-
+                debugger
                 history.replace('/orders')
 
             })
@@ -120,7 +127,7 @@ function Payment() {
                         </div>
                             
                         <div className="payment__details">
-                        <form onSubmit={handleSubmit} action="">
+                        <form onSubmit={handleSubmit}>
                                 <CardElement onChange={handleChange}/> 
                             <div className="payment__priceContainer">
                                 <h3> Order Total : $ {value} </h3>
